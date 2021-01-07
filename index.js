@@ -1,6 +1,6 @@
 const fs = require("fs"); //fs Stands for file system, 👉🏽 will give access to reading and writing data ,👉🏽 A built-in function
 const http = require("http");
-
+const url = require("url");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Files
 //Block synchrounous way
@@ -38,6 +38,23 @@ const http = require("http");
 //Server
 //1- Create the server
 const server = http.createServer((request, response) => {
+  console.log(request.url);
+  const pathName = request.url;
+  // '/' is the root
+  //Routing
+  if (pathName === "/" || pathName === "/overview") {
+    response.end("This is the overview");
+  } else if (pathName === "/product") {
+    response.end("This is the product");
+  } else {
+    //Sometime when page is not found we see 404 error
+    //We can also that too here
+    response.writeHead(404, {
+      "Content-type": "text/html",
+      "my-own-header": "hello-world",
+    });
+    response.end("<h1>Page not found!</h1>");
+  }
   response.end("Hello from the server");
 });
 //2- Listen to the incoming requests from the client
@@ -45,3 +62,4 @@ const server = http.createServer((request, response) => {
 server.listen(8000, "127.0.0.1", () => {
   console.log("Listening to the requests on port 8000");
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
