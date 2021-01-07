@@ -36,6 +36,11 @@ const url = require("url");
 // console.log("Will read file!");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Server
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const dataObject = JSON.parse(data);
+
+// response.writeHead(200, { "Content-type": "application/json" });
+// response.end(data);
 //1- Create the server
 const server = http.createServer((request, response) => {
   console.log(request.url);
@@ -46,6 +51,11 @@ const server = http.createServer((request, response) => {
     response.end("This is the overview");
   } else if (pathName === "/product") {
     response.end("This is the product");
+  } else if (pathName === "/api") {
+    //We want to get the data.json in this url
+    // We will use fs.read to read the data from that file
+    response.writeHead(200, { "Content-type": "application/json" });
+    response.end(data);
   } else {
     //Sometime when page is not found we see 404 error
     //We can also that too here
@@ -55,7 +65,7 @@ const server = http.createServer((request, response) => {
     });
     response.end("<h1>Page not found!</h1>");
   }
-  response.end("Hello from the server");
+  //   response.end("Hello from the server");
 });
 //2- Listen to the incoming requests from the client
 //first is the port and second is the local host and 3rd is a call back
